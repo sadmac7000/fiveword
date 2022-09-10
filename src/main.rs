@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::HashMap;
 use std::env::args;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -31,7 +31,11 @@ fn main() {
         panic!("Too many arguments");
     }
 
-    let mut word_list = BTreeMap::new();
+    let mut word_list = HashMap::new();
+    let mut root = Node {
+        key: 0,
+        children: Vec::with_capacity(word_list.len()),
+    };
 
     for line in BufReader::new(File::open(file).unwrap())
         .lines()
@@ -42,16 +46,10 @@ fn main() {
         if key.count_ones() != 5 {
             continue;
         }
-        word_list.entry(key).or_insert_with(Vec::new).push(line);
-    }
-
-    let mut root = Node {
-        key: 0,
-        children: Vec::with_capacity(word_list.len()),
-    };
-
-    for key in word_list.keys().copied() {
-        root.insert(key);
+        word_list.entry(key).or_insert_with(|| {
+            root.insert(key);
+            Vec::new()
+        }).push(line);
     }
 
     let mut found = 0;
