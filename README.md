@@ -29,7 +29,9 @@ The second optimization we do is in the comparison of words themselves. Matt red
 result. Instead, we map each word to a 32-bit unsigned integer, where each bit in the integer is
 non-zero if an only if the letter of the alphabet sharing that bit's index is present in the word.
 So bit 0 is set if the word contains the letter 'a', bit 1 if it contains the letter 'b', etc. At a
-basic level this is simply a highly machine-optimized representation of a set of characters, meaning each node in the tree is only an 
+basic level this is simply a highly machine-optimized representation of a set of characters,
+allowing us to do only a couple of integer instructions for each node we walk when we insert into
+the tree.
 
 Finally, there is the obvious lower-level optimization: both Matt and Benjamin's solutions are in
 Python, this solution is in Rust.
